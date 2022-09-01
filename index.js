@@ -25,6 +25,22 @@ app.get("/api/hello", function (req, res) {
 });
 
 
+app.get("/api/:date", (req, res) => {
+    const date_string = req.params.date
+    let date = new Date(date_string)
+
+    if (!date_string) {
+        date = new Date()
+    } else if (date_string.match(/\d{7,}/)) {
+        date.setTime(date_string)
+    } else if (date.toString() === "Invalid Date") {
+        res.json({ error : "Invalid Date" })
+    }
+    res.json({
+        "unix": date.getTime(),
+        "utc": date.toUTCString()
+    })
+})
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
